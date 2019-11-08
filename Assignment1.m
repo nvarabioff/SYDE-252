@@ -1,14 +1,59 @@
-% Problem 1: Numeric approximation of continuous time convolution
+% Problem 1: Numeric Approximation of continuous-time convolution %
 
-% Test arrays
-x = ones(1,100);
-y = 0.01:0.01:2;
+clc, clear;
+clf;
+
+% Testing
+
+% Test 1:
+% x = ones(1,100);
+% y = 0.01:0.01:2;
+
+% % Test 2:
+% t = 0:0.01:8*pi;
+% x = sin(t);
+% y = ones(1,10);
+
+% Test 3:
+t = 0:0.01:8*pi;
+x = sin(t);
+y = -2 * ones(1,10);
 
 % Testing against built-in MATLAB function
 convSoln = conv(x,y);
 myConvSoln = myConvolution(x,y);
-disp("Using Conv function");
-disp(convSoln);
+% disp("Using Conv function");
+% disp(convSoln);
+
+% Plot
+figure(1);
+subplot(4,1,1);
+hold on;
+title('x(t)');
+xlabel('t');
+plot(x);
+hold off;
+
+subplot(4,1,2);
+hold on;
+title('y(t)');
+xlabel('t');
+plot(y);
+hold off;
+
+subplot(4,1,3);
+hold on;
+title('My Convolution');
+xlabel('t');
+plot(myConvSoln);
+hold off;
+
+subplot(4,1,4);
+hold on;
+title('Built in convolution');
+xlabel('t');
+plot(convSoln);
+hold off;
 
 function [z] = myConvolution(x,y)
     
@@ -43,7 +88,9 @@ function [z] = myConvolution(x,y)
     
 end
 
-% Problem 3: Numeric Approximation of Fourier transform of continuous time signals
+
+% Problem 3: Numeric Approximation of Fourier Transform of Continuous Time
+% Signals
 
 % * Make helper function for finding period for t range and finding
 % possible freq's with t value, and vice versa for ift
@@ -54,9 +101,9 @@ clc, clear;
 clf;
 
 % Test 1: sin(t)
-t = 0:0.01:8*pi;
-w = 0:0.01:4;
-x = sin(t);
+% t = 0:0.01:8*pi;
+% w = 0:0.01:4;
+% x = sin(t);
 
 % Test 2: cos(3t)
 % t = 0:0.1:24*pi;
@@ -64,14 +111,14 @@ x = sin(t);
 % x = cos(3*t);
 
 % Test 3: complex exponential
-% t = 0:0.01:8*pi;
-% w = 0:0.01:4;
-% x = exp(i*2*t);
+t = 0:0.01:8*pi;
+w = 0:0.01:4;
+x = exp(i*2*t);
 
 xw = MyFT(x,t,w);
 xt = MyiFT(xw,w,t);
 
-figure(1);
+figure(2);
 subplot(3,1,1);
 hold on;
 title('x(t)');
@@ -147,7 +194,6 @@ function [Xt] =  MyiFT(Xw, w, t)
     Xt(i) = v/(2*pi);   % Remember division by 2pi
   end
 end
-
 
 
 
