@@ -96,56 +96,77 @@ end
 % possible freq's with t value, and vice versa for ift
 % * Better way to validate test cases
 % * More test cases
+% * Compare test cases with built in Fourier Transform functions
 
 clc, clear;
 clf;
 
-% Test 1: sin(t)
-% t = 0:0.01:8*pi;
-% w = 0:0.01:4;
-% x = sin(t);
+Fs = 1000; %Sampling frequency
+Ts = 1/Fs; % Sampling Period
+L = 1000; % Length of signal
+t = (0:L-1)*Ts; % Time vector
+L2 = 2^nextpow2(L);
+w = (0:(Fs/L2):(Fs/2-Fs/L2));
+dim = 2;
 
-% Test 2: cos(3t)
-% t = 0:0.1:24*pi;
-% w = 0:0.01:12;
-% x = cos(3*t);
+% Test 1: sin(100t)
+x = sin(100*t);
 
-% Test 3: complex exponential
-t = 0:0.01:8*pi;
-w = 0:0.01:4;
-x = exp(i*2*t);
+% Test 2: complex exponential
+% x = exp(1i*80*t);
+
+% Test 3: cos(60t)
+% x = cos(60*t);
 
 xw = MyFT(x,t,w);
 xt = MyiFT(xw,w,t);
 
-figure(2);
-subplot(3,1,1);
+figure(1);
+subplot(5,1,1);
 hold on;
 title('x(t)');
 xlabel('t');
-plot(t,x);
+plot(t, x);
 hold off;
 
-subplot(3,1,2);
+subplot(5,1,2);
 hold on;
-mag1 = sqrt(real(xw).^2 + imag(xw).^2);
+mag1 = (sqrt(real(xw).^2 + imag(xw).^2));
 % plot(w,real(xw));
 % plot(w,imag(xw));
 plot(w, mag1);
 % title('Fourier Transform of x(t) to X(w): Blue Real, Red Imaginary');
-title('Fourier Transform of x(t) to X(w): Magnitude');
-xlabel('w');
+title('Fourier Transform of x(t) to X(w)');
+xlabel('w(rad/s)');
 hold off;
 
-subplot(3,1,3);
+subplot(5,1,3);
 hold on;
-mag2 = sqrt(real(xt).^2 + imag(xt).^2);
-plot(t,real(xt));
-plot(t,imag(xt));
-% plot(t, mag2);
+Y = fft(x, L2, dim);
+P2 = abs(Y);
+P1 = P2(:,1:L2/2+1);
+plot(w, P1(1: L2/2));
+title('Built-in Fourier Transform of x(t) to X(w)');
+xlabel('f(Hz)');
+hold off;
+
+subplot(5,1,4);
+hold on;
+%mag2 = sqrt(real(xt).^2 + imag(xt).^2);
+plot(t, real(xt)/1000);
+%plot(t,imag(xt));
+%plot(t, mag2);
 title('Inverse Fourier Transform of X(w) back to x(t): Blue Real, Red Imaginary');
 xlabel('t');
 hold off;
+
+% subplot(5,1,5);
+% hold on;
+% X = ifft(Y, L2, dim);
+% plot(t, X);
+% title('Built-in Inverse Fourier Transform of X(w) back to x(t)');
+% xlabel('t');
+% hold off;
 
 % Fourier Transform (Analysis Equation)
 % Parameters:
@@ -194,6 +215,7 @@ function [Xt] =  MyiFT(Xw, w, t)
     Xt(i) = v/(2*pi);   % Remember division by 2pi
   end
 end
+
 
 
 
