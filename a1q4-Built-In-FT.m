@@ -4,10 +4,6 @@
 % Problem 4 %
 % Option 2: Identification of Piano Keys %
 
-% ** Test with custom FT
-% To toggle built in and custom FT:
-    % Comment lines 91, 92, 103, 109, 113
-    % Uncomment lines 95, 104, 110, 114
 % To switch between Music1 and Music2, change line 20
 
 clc, clear;
@@ -97,16 +93,15 @@ for j = 1:xt_length-1   % Loop through entire data
             hold on;
             title('X(jw)');
             xlabel('f');
-            plot(fft_length,abs(Xjw_plot));   % Built in
+            plot(fft_length,abs(Xjw_plot)); 
             hold off;
             
             % Find the maximum of the Fourier Transform - first value above x
             m = 1;
-            while abs(Xjw(m+1) - Xjw(m)) < 2.63   % Detects first spike in frequency (Built In)
+            while abs(Xjw(m+1) - Xjw(m)) < 2.63   % Detects first spike in frequency
                 m = m + 1;  % Index of the spike is the frequency
             end
-%             [value, m] = max(Xjw_plot);
-            noteFrequencies = [noteFrequencies; m/8.192];   % Add to array of frequencies, normalize (Built in)
+            noteFrequencies = [noteFrequencies; m/8.192];   % Add to array of frequencies, normalize
             
             currentNote = [];
         end
@@ -124,18 +119,6 @@ for p = 1:length(noteFrequencies)
     noteLetters = [noteLetters; findNote(noteFrequencies(p), noteFreqs, noteNamesFull)];
 end
 
-% My Fourier Transform Function
-function [Xw] = MyFT(Xt, t, w)
-    Xw = zeros(1, length(w));   % make Xw with range encompassing possible frequencies
-    for i = 1:length(w) % for every value on frequency representation Xw
-        v = 0;  % v is value at current index of Xw
-        for j = 1:length(t) % sum every value of time representation * comlpex exponential
-            v = v + Xt(j)*exp(-1i*t(j)*w(i));
-        end
-        Xw(i) = v;  % assign calculated value to index of Xw. Added the /2pi cause of radians to Hz
-    end
-end
-
 % Function to find notes from given data
 function [noteLetter] = findNote(freq, allNotes, noteNames) % allNotes is the given note frequencies, noteNames is the note names
     for i = 2:length(allNotes)
@@ -149,6 +132,3 @@ function [noteLetter] = findNote(freq, allNotes, noteNames) % allNotes is the gi
         end
     end
 end
-
-    
-

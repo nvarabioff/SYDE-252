@@ -4,9 +4,10 @@
 % Problem 4 %
 % Option 2: Identification of Piano Keys %
 
-% Differences bewteen Built in and Custom:
+% Differences bewteen Built in and Custom file:
     % fft_length is multiplied by 2pi on line 91 and 99
     % Fourier Transform line 91 - no need to split Xjw because custom function does not mirror impulse response
+    % Custom function takes way longer to run, but it still works
 
 % Toggle music 1 and music 2 with line 20
 
@@ -96,7 +97,7 @@ for j = 1:xt_length-1   % Loop through entire data
             hold on;
             title('X(jw)');
             xlabel('f');
-            plot(fft_length*2*pi,abs(Xjw));  % Custom
+            plot(fft_length*2*pi,abs(Xjw)); 
             hold off;
             
             % Find the maximum of the Fourier Transform - first value above x
