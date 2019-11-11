@@ -4,8 +4,9 @@
 % Problem 4 %
 % Option 2: Identification of Piano Keys %
 
-% ** Finding the frequency from Xjw
-% ** Dealing with frequencies greater than 8000
+% Differences bewteen Built in and Custom:
+    % fft_length is multiplied by 2pi on line 91 and 99
+    % Fourier Transform line 91 - no need to split Xjw because custom function does not mirror impulse response
 
 % Toggle music 1 and music 2 with line 20
 
@@ -18,7 +19,7 @@ load('Music1.mat'); % Fur Elise
 music1Data = acqData;   % Variable storing music1 data
 load('Music2.mat'); % Jingle Bells
 music2Data = acqData;   % Variable storing music 2 data
-currData = music2Data*2*pi;  % Toggle this to test Music1 and Music2 files
+currData = music1Data;  % Toggle this to test Music1 and Music2 files
 
 % Convert note series to function Xt
 xt_data = currData(:,1);
@@ -37,7 +38,7 @@ plot(Xt);
 hold off;
 
 % Information for Fourier Transform
-Fs = 16000*2*pi; % Sampling frequency
+Fs = 16000; % Sampling frequency
 Ts = 1/Fs;  % Sampling Period
 xt_length2 = 2^nextpow2(xt_length); % Creates new input length that is next power 2 of original length
 fft_length = Fs*(0:xt_length2/2-1)/xt_length2;  % Length of signal in frequency domain
@@ -59,7 +60,7 @@ for k = 1:xt_length-1
 end
 
 % noteLengths = [noteLengths(2:end); xt_length-lastNote-5000];  % Remove first "note" (noise) and add last note. Need the -5000 or the last note will have the wrong frequency
-noteLengths = [noteLengths(2:end); 8000*2*pi];
+noteLengths = [noteLengths(2:end); 8000];
 
 % Fourier Transform and detect frequency of each note
 currentNote = [];   % Current note
@@ -87,7 +88,7 @@ for j = 1:xt_length-1   % Loop through entire data
             hold off;
             
             % Custom Fourier Transform
-            Xjw = MyFT(currentNote, t, fft_length);
+            Xjw = MyFT(currentNote, t, fft_length*2*pi);
             
             % Plot Fourier transform
             figure(counter);
@@ -95,12 +96,16 @@ for j = 1:xt_length-1   % Loop through entire data
             hold on;
             title('X(jw)');
             xlabel('f');
-            plot(fft_length,abs(Xjw));  % Custom
+            plot(fft_length*2*pi,abs(Xjw));  % Custom
             hold off;
             
             % Find the maximum of the Fourier Transform - first value above x
-            [value, m] = max(Xjw);
-            noteFrequencies = [noteFrequencies; m/51.5];    % (Custom)
+            m = 1;
+            while abs(Xjw(m+1) - Xjw(m)) < 2.63   % Detects first big spike in frequency (Built In)
+                m = m + 1;  % Index of the spike is the frequency
+            end
+            
+            noteFrequencies = [noteFrequencies; m/8.192];    % Add to noteFrequencies list, normalized
             
             currentNote = [];
         end
