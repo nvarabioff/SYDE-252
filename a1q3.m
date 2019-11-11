@@ -3,12 +3,6 @@
 
 % Problem 3: Numeric Approximation of Fourier Transform of Continuous Time Signals
 
-% * Make helper function for finding period for t range and finding
-% possible freq's with t value, and vice versa for ift
-% * Better way to validate test cases
-% * More test cases
-% * Compare test cases with built in Fourier Transform functions
-
 clc, clear;
 clf;
 
